@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Build A Blog!</h1>
+    <form method="post" action='/'
+    <table> 
+        <tr>
+           <td>
+
+       <label>
+            Title for your new blog: </label> </td>
+        </tr>
+        <tr>
+            <td>
+            <input type="text" name="task" />
+            </td>
+
+        </tr>
+        <tr>
+            <td><label>
+                Your new blog: </label></td>
+        </tr>
+        <tr>
+            <td>
+                    <textarea rows="6" cols="50"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                    <input type="submit" value='Add Blog' />
+            </td>
+        </tr>
+    </table>
+        
+    </form>
+
+    <hr />
+   
+    
+{% endblock %}
