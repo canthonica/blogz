@@ -33,7 +33,7 @@ def index():
     return render_template('blog_page.html', title="Build a Blog")
 
 
-@app.route('/add_blog', methods=['POST', 'GET'])
+@app.route('/add_blog', methods=['POST', ""])
 def addblog ():
 
     #task_id = int(request.form['task-id'])

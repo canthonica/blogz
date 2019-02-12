@@ -22,9 +22,9 @@ class Task(db.Model):
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
-    if request.method == 'POST':
-        task_name = request.form['task']
-        new_task = Task(task_name)
+   # if request.method == 'POST':
+        #task_name = request.form['task']
+        #new_task = Task(task_name)
         db.session.add(new_task)
         db.session.commit()
 
@@ -33,14 +33,14 @@ def index():
     return render_template('blog_page.html', title="Build a Blog")
 
 
-@app.route('/add_blog', methods=['POST', 'GET'])
+@app.route('/add_blog', methods=['POST'])
 def addblog ():
 
     #task_id = int(request.form['task-id'])
     #task = Task.query.get(task_id)
-    #task.completed = True
-    #db.session.add(task)
-    #db.session.commit()
+    task.completed = True
+    db.session.add(task)
+    db.session.commit()
 
     return render_template('add_blog.html')
 
