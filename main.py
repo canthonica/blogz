@@ -31,7 +31,7 @@ def index():
 
     tasks = Blog.query.filter_by(completed=False).all()
     completed_tasks = Blog.query.filter_by(completed=True).all()
-    return render_template('blog_page.html',title="Get It Done!", 
+    return render_template('add_blog.html',title="Get It Done!", 
         tasks=tasks, completed_tasks=completed_tasks)
 '''
 @app.route('/newpost', methods=['POST', 'GET'])
