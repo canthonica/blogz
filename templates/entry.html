@@ -1,18 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-        <form method ="post">
+        <form method ="post" action='/newpost'>
             <label>
                 <div>Title</div>
                 <input type="text" name="title" value="{{title}}">
-                <div class="error">{{title_err}}</div>
             </label>
             <label>
                 <div>Entry</div>
                 <textarea name="entry">{{entry}}</textarea>
-            </label>
-            <div class="error">{{body_err}}</div>
-            <input type="submit">
+            
         </form>
 {% endblock %}
-
-
