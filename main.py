@@ -24,19 +24,26 @@ def index():
 def blog():
     blog_id = request.args.get('id')
 
-    
-    if blog_id == None:
+    if blog_id == None: 
         posts = Blog.query.all()
-        return render_template('blog_page.html', posts=posts, title='Build-a-blog')
-    else:
-        post = Blog.query.get(blog_id)
-        return render_template('add_blog.html', post=post, title='Blog Entry')
+        return render_template('blog_page.html', posts=posts, title='Blog Home Page')
+    
+    elif blog_id == "":
+        posts = Blog.query.all()
+        return render_template('add_blog.html')
 
+    else:
+        if (blog_id):
+            post = Blog.query.get(blog_id)
+            return render_template('entry.html', post=post, title='Blog Entry')
+
+    
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
     if request.method == 'POST':
         blog_title = request.form['title']
         blog_body = request.form['entry']
+        new_entry = Blog(blog_title, blog_body)
         title_err = ''
         body_err = ''
         
@@ -47,21 +54,27 @@ def newpost():
             body_err = "Please fill in blog body"
             return render_template('add_blog.html', blog_title=blog_title, title_err=title_err, body_err=body_err)
         if not body_err and not title_err:
-            new_entry = Blog(blog_title, blog_body)     
+            #url = "/blog?id=" + str(new_entry)
+            #new_entry = Blog(blog_title, blog_body)     
             db.session.add(new_entry)
             db.session.commit()        
-            #return redirect('/blog?id={}'.format(new_entry.id)) 
-            return redirect('/blog')
+            return redirect('/blog?id={}'.format(new_entry.id)) 
+            #return redirect(url)
 
     return render_template('add_blog.html')
     #return render_template('blog_page.html', title='New Entry', title_err=title_err, body_err=body_err, blog_title=blog_title, blog_body=blog_body)
     
     
-'''
-    @app.route('/entry', methods=['POST', 'GET'])
-    def entry():
-        return render_template('entry.html')
-'''
+
+@app.route('/entry', methods=['POST', 'GET'])
+def entry():
+    #if request.method == 'GET':
+    #post_title = request.args.get('post.title')
+    #post_body = request.args.get('post.body')        
+    return render_template('entry.html')
+    #return render_template('entry.html', post_title, post_body)
+    #redirect('/blog?id={}'.format(new_entry.id))
+
 if  __name__ == "__main__":
     app.run()
 
