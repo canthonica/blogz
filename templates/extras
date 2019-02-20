@@ -1,3 +1,46 @@
+
+        if not has_char(username):
+            error = "Invalid Username. Please enter a username with at least 3 charact"
+            
+        else:
+            if len(username) < 3:
+                error = "Invalid Username. Please enter a username with at least 3 characters"
+                username = ""
+        if not has_char(password):
+            pass_err = "Invalid Password. Please enter a password with at least 3 characters"
+                
+        else:
+            if len(password) < 3:
+                pass_err = "Invalid Password. Please enter a password with at least 3 characters"
+                
+                
+        if not has_char(verify):
+            verify_err = "Please enter a matching password"
+            
+        else:
+            if password != verify:
+                verify_err ="Please enter a matching password"
+                verify = ""
+        if not error and not pass_err and not verify_err:
+            return render_template('blog_page.html', username=username)
+        
+        else:
+            return render_template('signup.html', username=username, error=error, pass_err=pass_err, verify_err=verify_err)
+'''
+    existing_user = User.query.filter_by(username=username).first()
+    if not existing_user:
+        new_user = User(username, password)
+        db.session.add(new_user)
+        db.session.commit()
+        session['username'] = username
+        return redirect('/blog')
+    else:
+        # TODO - user better response messaging
+        return "<h1>Duplicate user</h1>"
+    # TODO - validate user's data
+''' 
+
+
 from main.py
 def blog():
 blog_id = request.args.get('id')
