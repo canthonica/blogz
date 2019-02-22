@@ -1,4 +1,22 @@
+<a href="/blog?user=userid{{user.id}}">{{ user.username }}</a>
+href="/blog?user=userid{{user.id}}">{{ user.username }}
 
+@app.route('/blog', methods=['POST', 'GET'])
+def blog():
+    blog_id = request.args.get('id')
+    user_id = request.args.get('userid')
+    # posts = Blog.query.all()
+    # Recent blog posts order to top.
+    posts = Blog.query.order_by(Blog.pub_date.desc())
+
+    if blog_id:
+        post = Blog.query.filter_by(id=blog_id).first()
+        return render_template("post.html", title=post.title, body=post.body, user=post.owner.username, pub_date=post.pub_date, user_id=post.owner_id)
+    if user_id:
+        entries = Blog.query.filter_by(owner_id=user_id).all()
+        return render_template('user.html', entries=entries)
+
+    return render_template('blog.html', posts=posts)
         if not has_char(username):
             error = "Invalid Username. Please enter a username with at least 3 charact"
             

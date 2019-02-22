@@ -29,26 +29,38 @@ class User(db.Model):
         self.password = password
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    return redirect('/blog')
+    users = User.query.all()
+    return render_template('index.html', users=users) #removed title='Home
 
-@app.route('/blog')   
+@app.route('/blog', methods = ['POST', 'GET'])   
 def list_blogs():
     blog_id = request.args.get('id')
+    user_id = request.args.get('userid')
+
+    #blog_post = Blog.query.filter_by(id=blog_id).first()
+    posts = Blog.query.all()
+    #owner = blog_post.owner
+    #users = User.query.all()
+    if user_id:
+        entries = Blog.query.filter_by(owner_id=user_id).all()
+        return render_template('singleUser.html', entries=entries)
+        
 
     if blog_id == None: 
-        posts = Blog.query.all()
-        return render_template('blog_page.html', posts=posts, title='Blog Home Page')
-    
-    elif blog_id == "":
+        post = Blog.query.filter_by(id=blog_id).first()
+        return render_template('blog_page.html', user_id=blog_id, posts=posts, title='Blog Home Page')
+   
+    if blog_id == "":
         posts = Blog.query.all()
         return render_template('add_blog.html')
 
     else:
         if (blog_id):
-            post = Blog.query.get(blog_id)
-            return render_template('entry.html', post=post, title='Blog Entry')
+            post = Blog.query.filter_by(id=blog_id).first()
+            return render_template('entry.html', post=post, title=post.title, body=post.body, user=post.owner.username, user_id=post.owner_id)
+    
 
     
 @app.route('/newpost', methods=['POST', 'GET'])
@@ -72,7 +84,7 @@ def newpost():
             #url = "/blog?id=" + str(new_entry)
             #new_entry = Blog(blog_title, blog_body)     
             db.session.add(new_entry)
-            db.session.commit()        
+            db.session.commit() 
             return redirect('/blog?id={}'.format(new_entry.id)) 
             #return redirect(url)
     blogs = Blog.query.filter_by(owner=owner).all()
@@ -166,6 +178,12 @@ def logout():
     del session['username']
     return redirect('/blog')
 
+@app.route('/singleUser', methods=['GET'])
+def singleUser():
+    users = User.query.filter_by(username=session['user_id']).first()
+    user_id = request.args.get('users')
+    blogs = Blog.query.filter_by(username=user_id).all()
+    return render_template('singleUser.html', users=users, blogs=blogs)
 
 
 if  __name__ == "__main__":
