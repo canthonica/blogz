@@ -32,22 +32,18 @@ class User(db.Model):
 @app.route('/', methods=['POST', 'GET'])
 def index():
     users = User.query.all()
-    return render_template('index.html', users=users) #removed title='Home
+    return render_template('index.html', users=users) 
 
 @app.route('/blog', methods = ['POST', 'GET'])   
 def list_blogs():
     blog_id = request.args.get('id')
     user_id = request.args.get('userid')
-
-    #blog_post = Blog.query.filter_by(id=blog_id).first()
     posts = Blog.query.all()
-    #owner = blog_post.owner
-    #users = User.query.all()
+
     if user_id:
         entries = Blog.query.filter_by(owner_id=user_id).all()
         return render_template('singleUser.html', entries=entries)
         
-
     if blog_id == None: 
         post = Blog.query.filter_by(id=blog_id).first()
         return render_template('blog_page.html', user_id=blog_id, posts=posts, title='Blog Home Page')
@@ -60,8 +56,6 @@ def list_blogs():
         if (blog_id):
             post = Blog.query.filter_by(id=blog_id).first()
             return render_template('entry.html', post=post, title=post.title, body=post.body, user=post.owner.username, user_id=post.owner_id)
-    
-
     
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
@@ -76,31 +70,21 @@ def newpost():
         
         if not blog_title or not blog_body:
             title_err = "Please fill in a title"
-            #return render_template('add_blog.html', title_err=title_err)
-        #if not blog_body:
             body_err = "Please fill in blog body"
             return render_template('add_blog.html', blog_title=blog_title, title_err=title_err, body_err=body_err)
         if not body_err and not title_err:
-            #url = "/blog?id=" + str(new_entry)
-            #new_entry = Blog(blog_title, blog_body)     
             db.session.add(new_entry)
             db.session.commit() 
             return redirect('/blog?id={}'.format(new_entry.id)) 
-            #return redirect(url)
+           
     blogs = Blog.query.filter_by(owner=owner).all()
     return render_template('add_blog.html', blogs=blogs)
-    #return render_template('blog_page.html', title='New Entry', title_err=title_err, body_err=body_err, blog_title=blog_title, blog_body=blog_body)
-    
-    
 
 @app.route('/entry', methods=['POST', 'GET'])
 def entry():
-    #if request.method == 'GET':
-    #post_title = request.args.get('post.title')
-    #post_body = request.args.get('post.body')        
+       
     return render_template('entry.html')
-    #return render_template('entry.html', post_title, post_body)
-    #redirect('/blog?id={}'.format(new_entry.id))
+
 def has_char(chex):
     if chex != "":
         return True
@@ -146,9 +130,9 @@ def signup():
             else:
                 return render_template('signup.html', username=username, error=error, pass_err=pass_err, verify_err=verify_err)    
         else:
-            # TODO - user better response messaging
+          
             return "<h1>Duplicate user</h1>"
-        # TODO - validate user's data
+     
        
     return render_template('signup.html')
 
